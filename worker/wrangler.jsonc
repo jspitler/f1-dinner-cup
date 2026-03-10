@@ -1,0 +1,10 @@
+{
+  "name": "f1-dinner-cup-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-03-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "MONGODB_DB": "f1dinnercup",
+    "MONGODB_COLLECTION": "state"
+  }
+}
