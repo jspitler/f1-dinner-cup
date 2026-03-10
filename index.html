@@ -317,7 +317,8 @@
 /* =========================================================
    CONFIG
    ========================================================= */
-
+const API_BASE = "https://f1-dinner-cup-api.spitlerj07.workers.dev";
+	
 const players = ["Jason", "Erika", "Archer"];
 
 const teamColors = {
@@ -629,8 +630,7 @@ function defaultState() {
 }
 
 async function loadStateFromServer() {
-  // Primary: shared state in Neon (via Netlify Function)
-  const res = await fetch("/.netlify/functions/state", { method: "GET" });
+  const res = await fetch("${API_BASE}/state", { method: "GET" });
   if (!res.ok) throw new Error("Failed to load state");
   const data = await res.json();
   // If DB row is empty, use defaults
@@ -666,7 +666,7 @@ function cacheLocally() {
 }
 
 async function pushStateToServer() {
-  const res = await fetch("/.netlify/functions/state", {
+  const res = await fetch("${API_BASE}/state", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(state),
