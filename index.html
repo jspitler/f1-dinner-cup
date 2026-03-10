@@ -630,7 +630,7 @@ function defaultState() {
 }
 
 async function loadStateFromServer() {
-  const res = await fetch("${API_BASE}/state", { method: "GET" });
+  const res = await fetch(`${API_BASE}/state`, { method: "GET" });
   if (!res.ok) throw new Error("Failed to load state");
   const data = await res.json();
   // If DB row is empty, use defaults
@@ -666,7 +666,7 @@ function cacheLocally() {
 }
 
 async function pushStateToServer() {
-  const res = await fetch("${API_BASE}/state", {
+  const res = await fetch(`${API_BASE}/state`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(state),
