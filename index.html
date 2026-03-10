@@ -1419,14 +1419,29 @@ function wireViewHandlers() {
     inp.addEventListener("input", (e) => {
       const driverId = e.target.dataset.driver;
       const eventId = e.target.dataset.event;
-      const val = e.target.value === "" ? "" : Number(e.target.value);
+      const raw = e.target.value;
+      const val = raw === "" ? "" : Number(raw);
 
       if (!state.results[eventId]) state.results[eventId] = {};
       if (val === "") delete state.results[eventId][driverId];
       else state.results[eventId][driverId] = val;
 
+      // Update only the points pill beside this field, without re-rendering the page
+      const ev = events.find(ev => ev.id === eventId);
+      const row = e.target.closest("tr");
+      const pill = row ? row.querySelector(".pill") : null;
+      if (pill) {
+        const pts = pointsFor(ev?.type, Number(raw || 0));
+        pill.textContent = `${pts} pts`;
+      }
+    });
+
+    inp.addEventListener("change", () => {
       saveState();
-      render();
+    });
+
+    inp.addEventListener("blur", () => {
+      saveState();
     });
   });
 
