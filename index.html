@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>F1 Dinner Cup</title>
+	<style>
+	/* =========================================
+	   F1 DARK THEME (Clean Rebuild-11:52AM)
+	========================================= */
+
+	:root{
+	  --bg-main:#0b0f14;
+	  --bg-elev:#111722;
+	  --bg-card:rgba(20,26,36,.85);
+
+	  --text:#f1f5f9;
+	  --muted:#9aa4b2;
+
+	  --border:rgba(255,255,255,.08);
+	  --border-strong:rgba(255,255,255,.18);
+
+	  --accent:#e10600; /* F1 Red */
+	  --accent-soft:rgba(225,6,0,.18);
+
+	  --radius:18px;
+	}
+
+	/* =========================================
+	   BASE
+	========================================= */
+
+	body{
+	  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+	  margin:16px;
+	  color:var(--text);
+	  min-height:100vh;
+
+	  background:
+		radial-gradient(1000px 700px at 15% 0%, rgba(225,6,0,.08), transparent 60%),
+		radial-gradient(800px 600px at 90% 20%, rgba(255,255,255,.03), transparent 60%),
+		linear-gradient(180deg,#0b0f14 0%,#0f141c 50%,#0b0f14 100%);
+	}
+
+	.app{
+	  max-width:1100px;
+	  margin:0 auto;
+	}
+
+	h1{
+	  margin:0;
+	  font-size:22px;
+	  letter-spacing:-.3px;
+	}
+
+	.small{ font-size:12px; color:var(--muted); }
+	.muted{ color:var(--muted); }
+	.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+	.row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+	.grow{ flex:1 1 auto; }
+
+	.divider{
+	  height:1px;
+	  background:linear-gradient(to right, transparent, var(--accent-soft), transparent);
+	  margin:12px 0;
+	}
+
+	/* =========================================
+	   HEADER
+	========================================= */
+
+	.topbar{
+	  display:flex;
+	  justify-content:space-between;
+	  align-items:flex-end;
+	  gap:12px;
+	  padding:16px;
+
+	  background:rgba(18,22,30,.85);
+	  backdrop-filter:blur(12px);
+	  border:1px solid var(--border);
+	  border-radius:var(--radius);
+	  box-shadow:0 20px 50px rgba(0,0,0,.6);
+	  margin-bottom:14px;
+	}
+
+	/* =========================================
+	   CARDS
+	========================================= */
+
+	.card{
+	  border:1px solid var(--border);
+	  background:var(--bg-card);
+	  backdrop-filter:blur(10px);
+	  border-radius:var(--radius);
+	  padding:14px;
+	  box-shadow:0 20px 45px rgba(0,0,0,.55);
+	}
+
+	/* =========================================
+	   TABS
+	========================================= */
+
+	.tabs{
+	  display:flex;
+	  gap:8px;
+	  flex-wrap:wrap;
+	  padding:8px;
+	  border-radius:var(--radius);
+	  border:1px solid var(--border);
+	  background:rgba(15,20,28,.9);
+	  margin-bottom:12px;
+	}
+
+	.tab{
+	  padding:8px 14px;
+	  border-radius:12px;
+	  border:1px solid transparent;
+	  background:transparent;
+	  color:var(--muted);
+	  cursor:pointer;
+	  transition:all .18s ease;
+	}
+
+	/* hover only inactive */
+	.tab:not(.active):hover{
+	  color:#fff;
+	  background:rgba(255,255,255,.05);
+	  transform:translateY(-1px);
+	}
+
+	.tab.active{
+	  background:var(--accent);
+	  color:#fff;
+	  border-color:var(--accent);
+	  box-shadow:0 8px 20px rgba(225,6,0,.4);
+	}
+
+	/* =========================================
+	   BUTTONS
+	========================================= */
+
+	.btn{
+	  padding:8px 12px;
+	  border-radius:12px;
+	  border:1px solid var(--border);
+	  background:var(--bg-elev);
+	  color:var(--text);
+	  cursor:pointer;
+	  transition:all .15s ease;
+	}
+
+	.btn:hover{
+	  background:rgba(255,255,255,.06);
+	  transform:translateY(-1px);
+	}
+
+	.btn.primary{
+	  background:var(--accent);
+	  border-color:var(--accent);
+	  color:#fff;
+	  box-shadow:0 10px 22px rgba(225,6,0,.35);
+	}
+
+	.btn.primary:hover{
+	  box-shadow:0 14px 30px rgba(225,6,0,.45);
+	}
+
+	/* =========================================
+	   TABLES
+	========================================= */
+
+	table{
+	  width:100%;
+	  border-collapse:collapse;
+	}
+
+	th, td{
+	  border:1px solid var(--border);
+	  padding:6px 8px;
+	  text-align:left;
+	}
+
+	th{
+	  background:rgba(255,255,255,.05);
+	  color:#fff;
+	  position:sticky;
+	  top:0;
+	  z-index:1;
+	}
+
+	.right{ text-align:right; }
+
+	/* =========================================
+	   FORM ELEMENTS
+	========================================= */
+
+	select,
+	input[type="number"]{
+	  padding:6px 8px;
+	  border-radius:12px;
+	  border:1px solid var(--border);
+	  background:var(--bg-elev);
+	  color:var(--text);
+	  max-width:100%;
+	}
+
+	input[type="number"]{ width:70px; }
+
+	select:focus,
+	input:focus,
+	button:focus{
+	  outline:none;
+	  border-color:var(--accent);
+	  box-shadow:0 0 0 2px var(--accent-soft);
+	}
+
+	/* =========================================
+	   PILLS (FIXED FOR DARK)
+	========================================= */
+
+	.pill{
+	  display:inline-flex;
+	  align-items:center;
+	  gap:6px;
+	  padding:4px 10px;
+	  border-radius:999px;
+	  font-size:12px;
+	  border:1px solid var(--border);
+	  background:rgba(255,255,255,.06);
+	  color:#fff;
+	}
+
+	/* Sprint badge */
+	.pill span.muted{
+	  color:#d1d5db;
+	}
+
+	/* Status */
+	.ok{ background:rgba(0,200,0,.15); border-color:rgba(0,200,0,.4); }
+	.warn{ background:rgba(255,170,0,.18); border-color:rgba(255,170,0,.45); }
+	.danger{ background:rgba(225,6,0,.25); border-color:rgba(225,6,0,.6); }
+
+	/* =========================================
+	   CHIPS
+	========================================= */
+
+	.chip{
+	  display:inline-flex;
+	  align-items:center;
+	  gap:8px;
+	  padding:4px 10px;
+	  border-radius:999px;
+	  font-size:12px;
+	  font-weight:700;
+	  white-space:nowrap;
+	  border:1px solid rgba(255,255,255,.08);
+	}
+
+	.chip-dot{
+	  width:8px;
+	  height:8px;
+	  border-radius:999px;
+	  background:#fff;
+	  border:1px solid rgba(0,0,0,.4);
+	}
+
+	/* =========================================
+	   GRID
+	========================================= */
+
+	.grid{ display:grid; gap:12px; }
+	.two{ grid-template-columns:1fr; }
+	.scroll{ max-height:62vh; overflow:auto; border-radius:var(--radius); }
+
+	@media (min-width:920px){
+	  .two{ grid-template-columns:1fr 1fr; }
+	}
+
+	#view{ margin-top:12px; }
+
+	</style>
+</head>
+<body>
+  
+  <div class="app">
+    <div class="topbar">
+      <div class="titleblock">
+        <h1>F1 Dinner Cup</h1>
+        <div class="subtitle">Family picks • Weekly Meal Winner</div>
+      </div>
+      <div class="statusline">
+        <span class="pill" id="saveStatus"></span>
+      </div>
+    </div>
+
+  <div class="tabs">
+    <button class="tab active" data-view="weekend">Race Weekend</button>
+    <button class="tab" data-view="season">Season Picks</button>
+    <button class="tab" data-view="leaderboard">Leaderboards</button>
+    <button class="tab" data-view="results">Commissioner Results</button>
+  </div>
+  <div id="view"></div>
+
+  <div class="row" style="margin-bottom:12px;">
+    <button class="btn" id="btnReset">Reset Season</button>
+    <button class="btn" id="btnExport">Export JSON</button>
+    <label class="btn" style="display:inline-block;">
+      Import JSON
+      <input id="fileImport" type="file" accept="application/json" style="display:none;">
+    </label>
+    <span class="small muted" style="margin-left:auto;">Tip: Use “Next Open” to jump to the next weekend you can still pick.</span>
+  </div>
+<script>
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const players = ["Jason", "Erika", "Archer"];
+
+const teamColors = {
+  "Alpine":          { bg: "#061a4d", fg: "#FF88BD" },
+  "Aston Martin":    { bg: "#00665e", fg: "#b9c600" },
+  "Audi":            { bg: "#101319", fg: "#ffffff" },
+  "Cadillac":        { bg: "#ffffff", fg: "#000000" },
+  "Ferrari":         { bg: "#da291c", fg: "#ffffff" },
+  "Haas":            { bg: "#e6002d", fg: "#000000" },
+  "McLaren":         { bg: "#ff8000", fg: "#ffffff" },
+  "Mercedes":        { bg: "#00f5d0", fg: "#00a39e" },
+  "Racing Bulls":    { bg: "#070b36", fg: "#ffffff" },
+  "Red Bull Racing": { bg: "#00162b", fg: "#db0a40" },
+  "Williams":        { bg: "#041E42", fg: "#00A3E0" },
+};
+
+const drivers = [
+  { id: "ALP_GAS", team: "Alpine", name: "Pierre Gasly" },
+  { id: "ALP_COL", team: "Alpine", name: "Franco Colapinto" },
+
+  { id: "AM_ALO", team: "Aston Martin", name: "Fernando Alonso" },
+  { id: "AM_STR", team: "Aston Martin", name: "Lance Stroll" },
+
+  { id: "AUD_HUL", team: "Audi", name: "Nico Hulkenberg" },
+  { id: "AUD_BOR", team: "Audi", name: "Gabriel Bortoletto" },
+
+  { id: "CAD_PER", team: "Cadillac", name: "Sergio Perez" },
+  { id: "CAD_BOT", team: "Cadillac", name: "Valtteri Bottas" },
+
+  { id: "FER_LEC", team: "Ferrari", name: "Charles Leclerc" },
+  { id: "FER_HAM", team: "Ferrari", name: "Lewis Hamilton" },
+
+  { id: "HAA_OCO", team: "Haas", name: "Esteban Ocon" },
+  { id: "HAA_BEA", team: "Haas", name: "Oliver Bearman" },
+
+  { id: "MCL_NOR", team: "McLaren", name: "Lando Norris" },
+  { id: "MCL_PIA", team: "McLaren", name: "Oscar Piastri" },
+
+  { id: "MER_RUS", team: "Mercedes", name: "George Russell" },
+  { id: "MER_ANT", team: "Mercedes", name: "Kimi Antonelli" },
+
+  { id: "RB_LAW", team: "Racing Bulls", name: "Liam Lawson" },
+  { id: "RB_LIN", team: "Racing Bulls", name: "Arvid Lindblad" },
+
+  { id: "RBR_VER", team: "Red Bull Racing", name: "Max Verstappen" },
+  { id: "RBR_HAD", team: "Red Bull Racing", name: "Isack Hadjar" },
+
+  { id: "WIL_SAI", team: "Williams", name: "Carlos Sainz" },
+  { id: "WIL_ALB", team: "Williams", name: "Alex Albon" },
+];
+
+const teams = [...new Set(drivers.map(d => d.team))].sort();
+// IMPORTANT: sprint weekends should include BOTH SP + GP events inside one weekend.
+// You can expand this list for the full season.
+const weekends = [
+  {
+    id: "1",
+    label: "Australian GP (Round 1)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP1", label: "Australian GP @ Albert Park", type: "GP", dateTimeText: "Saturday 3/7 @ 11:00 PM" }
+    ]
+  },
+  {
+    id: "2",
+    label: "China Sprint + GP (Round 2)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    events: [
+      { id: "SP1", label: "Chinese Sprint @ Shanghai Int’l", type: "SP", dateTimeText: "Friday 3/13 @ 11:00 PM" },
+      { id: "GP2", label: "Chinese GP @ Shanghai Int’l", type: "GP", dateTimeText: "Sunday 3/15 @ 3:00 AM" }
+    ]
+  },
+  {
+    id: "3",
+    label: "Japanese GP (Round 3)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP3", label: "Japanese GP @ Suzuka", type: "GP", dateTimeText: "Sunday 3/29 @ 1:00 AM" }
+    ]
+  },
+  {
+    id: "4",
+    label: "Bahrain GP (Round 4)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP4", label: "Bahrain GP @ Bahrain Int’l", type: "GP", dateTimeText: "Sunday 4/12 @ 11:00 AM" }
+    ]
+  },
+  {
+    id: "5",
+    label: "Saudi Arabian GP (Round 5)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP5", label: "Saudi Arabian GP @ Jeddah Corniche", type: "GP", dateTimeText: "Sunday 4/19 @ 1:00 PM" }
+    ]
+  },
+  {
+    id: "6",
+    label: "Miami Sprint + GP (Round 6)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    events: [
+      { id: "SP2", label: "Miami Sprint @ Miami Int’l Autodrome", type: "SP", dateTimeText: "Saturday 5/2 @ 12:00 PM" },
+      { id: "GP6", label: "Miami GP @ Miami Int’l Autodrome", type: "GP", dateTimeText: "Sunday 5/3 @ 4:00 PM" }
+    ]
+  },
+  {
+    id: "7",
+    label: "Canadian Sprint + GP (Round 7)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    events: [
+      { id: "SP3", label: "Canadian Sprint @ Circuit Gilles Villeneuve", type: "SP", dateTimeText: "Saturday 5/23 @ 12:00 PM" },
+      { id: "GP7", label: "Canadian GP @ Circuit Gilles Villeneuve", type: "GP", dateTimeText: "Sunday 5/24 @ 4:00 PM" }
+    ]
+  },
+  {
+    id: "8",
+    label: "Monaco GP (Round 8)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP8", label: "Monaco GP @ Circuit de Monaco", type: "GP", dateTimeText: "Sunday 6/7 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "9",
+    label: "Barcelona GP (Round 9)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP9", label: "Barcelona GP @ Circuit de Barcelona-Catalunya", type: "GP", dateTimeText: "Sunday 6/14 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "10",
+    label: "Austrian GP (Round 10)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP10", label: "Austrian GP @ Red Bull Ring", type: "GP", dateTimeText: "Sunday 6/28 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "11",
+    label: "British Sprint + GP (Round 11)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    events: [
+      { id: "SP4", label: "British Sprint @ Silverstone", type: "SP", dateTimeText: "Saturday 7/4 @ 7:00 AM" },
+      { id: "GP11", label: "British GP @ Silverstone", type: "GP", dateTimeText: "Sunday 7/5 @ 10:00 AM" }
+    ]
+  },
+  {
+    id: "12",
+    label: "Belgian GP (Round 12)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP12", label: "Belgian GP @ Spa-Francorchamps", type: "GP", dateTimeText: "Sunday 7/19 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "13",
+    label: "Hungarian GP (Round 13)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP13", label: "Hungarian GP @ Hungaroring", type: "GP", dateTimeText: "Sunday 7/26 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "14",
+    label: "Dutch Sprint + GP (Round 14)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    events: [
+      { id: "SP5", label: "Dutch Sprint @ Circuit Zandvoort", type: "SP", dateTimeText: "Saturday 8/22 @ 6:00 AM" },
+      { id: "GP14", label: "Dutch GP @ Circuit Zandvoort", type: "GP", dateTimeText: "Sunday 8/23 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "15",
+    label: "Italian GP (Round 15)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP15", label: "Italian GP @ Autodromo Nazionale Monza", type: "GP", dateTimeText: "Sunday 9/6 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "16",
+    label: "Spanish GP (Round 16)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP16", label: "Spanish GP @ Madring Street Circuit", type: "GP", dateTimeText: "Sunday 9/13 @ 9:00 AM" }
+    ]
+  },
+  {
+    id: "17",
+    label: "Azerbaijan GP (Round 17)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP17", label: "Azerbaijan GP @ Baku City Circuit", type: "GP", dateTimeText: "Saturday 9/26 @ 7:00 AM" }
+    ]
+  },
+  {
+    id: "18",
+    label: "Singapore Sprint + GP (Round 18)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    events: [
+      { id: "SP6", label: "Singapore Sprint @ Marina Bay Street Circuit", type: "SP", dateTimeText: "Saturday 10/10 @ 5:00 AM" },
+      { id: "GP18", label: "Singapore GP @ Marina Bay Street Circuit", type: "GP", dateTimeText: "Sunday 10/11 @ 8:00 AM" }
+    ]
+  },
+  {
+    id: "19",
+    label: "United States GP (Round 19)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP19", label: "United States GP @ Circuit of the Americas", type: "GP", dateTimeText: "Sunday 10/25 @ 4:00 PM" }
+    ]
+  },
+  {
+    id: "20",
+    label: "Mexico GP (Round 20)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP20", label: "Mexico GP @ Autódromo Hermanos Rodríguez", type: "GP", dateTimeText: "Sunday 11/1 @ 3:00 PM" }
+    ]
+  },
+  {
+    id: "21",
+    label: "Brazilian GP (Round 21)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP21", label: "Brazilian GP @ Interlagos", type: "GP", dateTimeText: "Sunday 11/8 @ 12:00 PM" }
+    ]
+  },
+  {
+    id: "22",
+    label: "Las Vegas GP (Round 22)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP22", label: "Las Vegas GP @ Las Vegas Street Circuit", type: "GP", dateTimeText: "Saturday 11/21 @ 11:00 PM" }
+    ]
+  },
+  {
+    id: "23",
+    label: "Qatar GP (Round 23)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP23", label: "Qatar GP @ Lusail Int’l Circuit", type: "GP", dateTimeText: "Sunday 11/29 @ 11:00 AM" }
+    ]
+  },
+  {
+    id: "24",
+    label: "Abu Dhabi GP (Round 24)",
+    pickLockText: "Lock GP pick after Qualifying",
+    events: [
+      { id: "GP24", label: "Abu Dhabi GP @ Yas Marina Circuit", type: "GP", dateTimeText: "Sunday 12/6 @ 8:00 AM" }
+    ]
+  },
+];
+
+const pointsGP = { 1:25, 2:18, 3:15, 4:12, 5:10, 6:8, 7:6, 8:4, 9:2, 10:1 };
+const pointsSP = { 1:8, 2:7, 3:6, 4:5, 5:4, 6:3, 7:2, 8:1 };
+
+/* =========================================================
+   STATE / STORAGE
+   ========================================================= */
+
+const STORAGE_KEY = "spitler_f1_fantasy_server_cache_v1";
+
+function buildAllEventsFromWeekends() {
+  const map = new Map();
+  for (const w of weekends) for (const e of w.events) map.set(e.id, e);
+  return [...map.values()];
+}
+const events = buildAllEventsFromWeekends();
+
+function defaultState() {
+  // results[eventId][driverId] = finishing place
+  const results = {};
+  for (const e of events) results[e.id] = {};
+
+  // seasonPicks[player] = { driverId, teamName }
+  const seasonPicks = {};
+  for (const p of players) seasonPicks[p] = { driverId: "", teamName: "" };
+
+  // weeklyPick[weekendId][player][eventId] = driverId
+  const weeklyPick = {};
+  for (const w of weekends) {
+    weeklyPick[w.id] = {};
+    for (const p of players) {
+      weeklyPick[w.id][p] = {};
+      for (const e of w.events) weeklyPick[w.id][p][e.id] = "";
+    }
+  }
+
+  // lock[weekendId][eventId] = boolean (two-stage lock)
+  const lock = {};
+  for (const w of weekends) {
+    lock[w.id] = {};
+    for (const e of w.events) lock[w.id][e.id] = false;
+  }
+
+  // seasonLock: locks season picks (before race 1)
+  const seasonLock = false;
+
+  return {
+    results,
+    seasonPicks,
+    weeklyPick,
+    lock,
+    seasonLock,
+    ui: { view:"weekend", selectedWeekendId: weekends[0]?.id || "" }
+  };
+}
+
+async function loadStateFromServer() {
+  // Primary: shared state in Neon (via Netlify Function)
+  const res = await fetch("/.netlify/functions/state", { method: "GET" });
+  if (!res.ok) throw new Error("Failed to load state");
+  const data = await res.json();
+  // If DB row is empty, use defaults
+  if (!data || (typeof data === "object" && Object.keys(data).length === 0)) return defaultState();
+  // Merge with defaults to tolerate app updates
+  return { ...defaultState(), ...data };
+}
+
+function loadStateFromLocalCache() {
+  // Optional fallback if you’re offline or the API is down
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    return { ...defaultState(), ...parsed };
+  } catch {
+    return defaultState();
+  }
+}
+
+let state = defaultState();
+let saveTimer = null;
+let saveDebounceTimer = null;
+
+function setSaveStatus(text) {
+  const el = document.getElementById("saveStatus");
+  if (!el) return;
+  el.textContent = text || "";
+}
+
+function cacheLocally() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+}
+
+async function pushStateToServer() {
+  const res = await fetch("/.netlify/functions/state", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(state),
+  });
+  if (!res.ok) throw new Error("Failed to save state");
+}
+
+function saveState() {
+  // Debounced save so typing/scrolling doesn't hammer the API
+  cacheLocally();
+  setSaveStatus("Saving…");
+
+  clearTimeout(saveDebounceTimer);
+  saveDebounceTimer = setTimeout(async () => {
+    try {
+      await pushStateToServer();
+      setSaveStatus("Saved");
+    } catch (e) {
+      setSaveStatus("Offline (saved locally)");
+    }
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => setSaveStatus(""), 1200);
+  }, 350);
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function teamStyle(team) {
+  const c = teamColors[team];
+  if (!c) return "";
+  return `background:${c.bg}; color:${c.fg};`;
+}
+
+function driverById(id){ return drivers.find(d => d.id === id) || null; }
+
+function driverChip(driverId) {
+  const d = driverById(driverId);
+  if (!d) return `<span class="pill">(none)</span>`;
+  const c = teamColors[d.team] || { bg:"#f2f2f2", fg:"#111" };
+  return `<span class="chip" style="background:${c.bg}; color:${c.fg};">
+    <span class="chip-dot"></span>${d.name}
+  </span>`;
+}
+
+function teamChip(team) {
+  const c = teamColors[team] || { bg:"#f2f2f2", fg:"#111" };
+  return `<span class="chip" style="background:${c.bg}; color:${c.fg};">
+    <span class="chip-dot"></span>${team}
+  </span>`;
+}
+
+// Driver dropdown options: driver name only (no team label)
+function driverOptionsHTML(selectedId, includeBlank=true) {
+  const sorted = drivers.slice().sort((a,b) => a.name.localeCompare(b.name));
+  const opts = sorted.map(d => {
+    const c = teamColors[d.team] || {};
+    const style = c.bg ? `style="background:${c.bg}; color:${c.fg};"` : "";
+    return `<option value="${d.id}" ${d.id===selectedId?"selected":""} ${style}>${d.name}</option>`;
+  }).join("");
+  return (includeBlank ? `<option value="" ${!selectedId?"selected":""}>(select)</option>` : "") + opts;
+}
+
+function teamOptionsHTML(selectedTeam, includeBlank=true) {
+  const opts = teams.map(t => {
+    const c = teamColors[t] || {};
+    const style = c.bg ? `style="background:${c.bg}; color:${c.fg};"` : "";
+    return `<option value="${t}" ${t===selectedTeam?"selected":""} ${style}>${t}</option>`;
+  }).join("");
+  return (includeBlank ? `<option value="" ${!selectedTeam?"selected":""}>(select)</option>` : "") + opts;
+}
+
+function setView(view) {
+  state.ui.view = view;
+  saveState();
+  render();
+}
+
+function setSelectedWeekend(id) {
+  state.ui.selectedWeekendId = id;
+  saveState();
+  render();
+}
+
+function weekendIndexById(id) {
+  return weekends.findIndex(w => w.id === id);
+}
+
+// Picks the next weekend in the calendar (no skipping).
+function goNextWeekend() {
+  const idx = weekendIndexById(state.ui.selectedWeekendId);
+  const nextIdx = idx + 1;
+  if (nextIdx >= 0 && nextIdx < weekends.length) setSelectedWeekend(weekends[nextIdx].id);
+}
+
+// Picks the previous weekend in the calendar (no skipping).
+function goPrevWeekend() {
+  const idx = weekendIndexById(state.ui.selectedWeekendId);
+  const prevIdx = idx - 1;
+  if (prevIdx >= 0 && prevIdx < weekends.length) setSelectedWeekend(weekends[prevIdx].id);
+}
+
+// Jumps to the next weekend that still has at least one unlocked event.
+// If the currently selected weekend is still open, this keeps you on it.
+function goNextOpenWeekend() {
+  const start = Math.max(0, weekendIndexById(state.ui.selectedWeekendId));
+  if (!weekends.length) return;
+
+  for (let k = 0; k < weekends.length; k++) {
+    const i = (start + k) % weekends.length;
+    const w = weekends[i];
+    if (!isWeekendFullyLocked(w)) {
+      setSelectedWeekend(w.id);
+      return;
+    }
+  }
+}
+
+function isEventLocked(weekendId, eventId) {
+  return !!state.lock?.[weekendId]?.[eventId];
+}
+
+function isWeekendFullyLocked(weekend) {
+  return weekend.events.every(e => isEventLocked(weekend.id, e.id));
+}
+
+
+function weekendHasOpenPicks(weekend){
+  // "open" means at least one event is not locked
+  return weekend.events.some(e => !isEventLocked(weekend.id, e.id));
+}
+
+function weekendHasOpenResults(weekend){
+  // "open" means results are not fully entered (any blank/0 for any driver for any event in the weekend)
+  return weekend.events.some(e => {
+    const evRes = state.results?.[e.id] || {};
+    return drivers.some(d => !evRes[d.id] || Number(evRes[d.id]) <= 0);
+  });
+}
+
+function selectWeekendByIndex(i){
+  const clamped = Math.max(0, Math.min(weekends.length - 1, i));
+  setSelectedWeekend(weekends[clamped].id);
+}
+
+function findNextWeekend(fromIndex, predicate){
+  for (let i = fromIndex + 1; i < weekends.length; i++){
+    if (predicate(weekends[i])) return i;
+  }
+  return -1;
+}
+
+/* =========================================================
+   SCORING
+   ========================================================= */
+
+function pointsFor(eventType, place) {
+  if (!place || place <= 0) return 0;
+  if (eventType === "GP") return pointsGP[place] || 0;
+  if (eventType === "SP") return pointsSP[place] || 0;
+  return 0;
+}
+
+function computeDriverTotals() {
+  const totals = {};
+  for (const d of drivers) totals[d.id] = 0;
+
+  for (const e of events) {
+    const evRes = state.results[e.id] || {};
+    for (const d of drivers) {
+      const place = Number(evRes[d.id] || 0);
+      totals[d.id] += pointsFor(e.type, place);
+    }
+  }
+  return totals;
+}
+
+function computeTeamTotals(driverTotals) {
+  const teamTotals = {};
+  for (const t of teams) teamTotals[t] = 0;
+  for (const d of drivers) {
+    teamTotals[d.team] = (teamTotals[d.team] || 0) + (driverTotals[d.id] || 0);
+  }
+  return teamTotals;
+}
+
+function computeWeekendPlayerPoints(weekend, player) {
+  let sum = 0;
+  for (const e of weekend.events) {
+    const pickDriverId = state.weeklyPick?.[weekend.id]?.[player]?.[e.id] || "";
+    if (!pickDriverId) continue;
+    const place = Number((state.results[e.id] || {})[pickDriverId] || 0);
+    sum += pointsFor(e.type, place);
+  }
+  return sum;
+}
+
+function computeSeasonPickTotalForPlayer(player, driverTotals, teamTotals) {
+  const pick = state.seasonPicks[player];
+  const dPts = pick?.driverId ? (driverTotals[pick.driverId] || 0) : 0;
+  const tPts = pick?.teamName ? (teamTotals[pick.teamName] || 0) : 0;
+  return dPts + tPts;
+}
+
+function computeWeekendWinner(weekend) {
+  const driverTotals = computeDriverTotals();
+  const teamTotals = computeTeamTotals(driverTotals);
+
+  const scores = players.map(p => {
+    const picks = {};
+    for (const e of weekend.events) picks[e.id] = state.weeklyPick?.[weekend.id]?.[p]?.[e.id] || "";
+    const weekendPts = computeWeekendPlayerPoints(weekend, p);
+    const seasonTiePts = computeSeasonPickTotalForPlayer(p, driverTotals, teamTotals);
+    return { player: p, picks, weekendPts, seasonTiePts };
+  });
+
+  const maxWeekend = Math.max(...scores.map(s => s.weekendPts));
+  const topWeekend = scores.filter(s => s.weekendPts === maxWeekend);
+
+  if (topWeekend.length === 1 && maxWeekend > 0) {
+    return { type: "winner", winner: topWeekend[0].player, scores };
+  }
+
+  const allSameWeekend = scores.every(s => s.weekendPts === scores[0].weekendPts);
+  if (allSameWeekend && maxWeekend === 0) {
+    const maxTie = Math.max(...scores.map(s => s.seasonTiePts));
+    const topTie = scores.filter(s => s.seasonTiePts === maxTie);
+    if (topTie.length === 1) return { type: "tiebreak_winner", winner: topTie[0].player, scores };
+    return { type: "tie", winners: topTie.map(x => x.player), scores, tieReason:"season" };
+  }
+
+  return { type:"tie", winners: topWeekend.map(x => x.player), scores, tieReason:"weekend" };
+}
+
+/* =========================================================
+   VIEWS
+   ========================================================= */
+
+function viewWeekend() {
+  const weekend = weekends.find(w => w.id === state.ui.selectedWeekendId) || weekends[0];
+  const fullyLocked = isWeekendFullyLocked(weekend);
+  const winner = computeWeekendWinner(weekend);
+
+const eventBadges = weekend.events.map(e => {
+  const style = e.type === "SP"
+    ? "background:rgba(225,6,0,.18); border-color:rgba(225,6,0,.55); color:#fff;"
+    : "background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.16); color:#fff;";
+  const when = e.dateTimeText ? `<div class="small muted">${e.dateTimeText}</div>` : "";
+  return `<span class="pill" style="${style}">
+    ${e.label} <span class="muted">(${e.type})</span>
+    ${when}
+  </span>`;
+}).join(" ");
+
+  const lockButtons = weekend.events.map(e => {
+    const locked = isEventLocked(weekend.id, e.id);
+    return `
+      <button class="btn ${locked ? "" : "primary"}"
+              data-lock-weekend="${weekend.id}"
+              data-lock-event="${e.id}">
+        ${locked ? `Unlock ${e.type}` : `Lock ${e.type}`}
+      </button>
+    `;
+  }).join("");
+
+  const winnerText = (() => {
+    if (winner.type === "winner") return `<div class="winner">Weekly Winner: ${winner.winner} 🏁</div>`;
+    if (winner.type === "tiebreak_winner") return `<div class="winner">Weekly Winner (Tiebreak): ${winner.winner} 🏁</div>
+      <div class="small">All weekly picks tied at 0 → season picks total used.</div>`;
+    if (winner.type === "tie") {
+      const why = winner.tieReason === "season" ? "Season picks total also tied." : "Weekend points tied.";
+      return `<div class="winner">Tie: ${winner.winners.join(" & ")}</div><div class="small">${why}</div>`;
+    }
+    return `<div class="winner">No winner yet</div>`;
+  })();
+
+  const pickRows = players.map(p => {
+    const pts = computeWeekendPlayerPoints(weekend, p);
+
+    const pickControls = weekend.events.map(e => {
+      const pickId = state.weeklyPick?.[weekend.id]?.[p]?.[e.id] || "";
+      const disabled = isEventLocked(weekend.id, e.id);
+      const place = pickId ? Number((state.results[e.id] || {})[pickId] || 0) : 0;
+      const evPts = pickId ? pointsFor(e.type, place) : 0;
+
+      return `
+        <div style="margin-bottom:10px;">
+          <div class="small">
+            <strong>${e.type}</strong> — ${e.label}
+            ${disabled ? `<span class="pill danger" style="margin-left:6px;">locked</span>` : `<span class="pill ok" style="margin-left:6px;">open</span>`}
+          </div>
+		  ${e.dateTimeText ? `<div class="small muted">${e.dateTimeText}</div>` : ""}
+
+          <div class="row" style="gap:8px; align-items:center; margin-top:6px;">
+            <select data-weekend="${weekend.id}" data-player="${p}" data-event="${e.id}" ${disabled ? "disabled":""}>
+              ${driverOptionsHTML(pickId, true)}
+            </select>
+            <span class="pill">${evPts} pts</span>
+          </div>
+
+          <div class="small" style="margin-top:6px;">
+            ${pickId ? driverChip(pickId) : `<span class="pill">(no pick)</span>`}
+            ${pickId ? `<span class="muted" style="margin-left:6px;">place: ${place || "-"}</span>` : ""}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <tr>
+        <td style="min-width:110px;"><strong>${p}</strong></td>
+        <td>${pickControls}</td>
+        <td class="right" style="min-width:110px;"><strong>${pts}</strong></td>
+      </tr>
+    `;
+  }).join("");
+
+  const scoreDetails = winner.scores.map(s => {
+    const picksHTML = weekend.events.map(e => {
+      const id = s.picks?.[e.id] || "";
+      return `<div class="small" style="margin:4px 0;">
+        <strong>${e.type}</strong>: ${id ? driverChip(id) : `<span class="pill">(none)</span>`}
+      </div>`;
+    }).join("");
+    return `
+      <tr>
+        <td>${s.player}</td>
+        <td>${picksHTML}</td>
+        <td class="right">${s.weekendPts}</td>
+        <td class="right">${s.seasonTiePts}</td>
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <div class="grid">
+      <div class="card">
+        <div class="row">
+          <div class="grow">
+            <strong>Race Weekend</strong>
+            <div class="small">Separate picks per event (Sprint + GP), but one winner based on combined total.</div>
+          </div>
+          <span class="pill ${fullyLocked ? "danger":"ok"}">${fullyLocked ? "All Picks Locked" : "Picks Open"}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="align-items:flex-end;">
+          <div class="grow">
+            <label class="small">Weekend</label><br/>
+            <select id="weekendSelect">
+              ${weekends.map(w => `<option value="${w.id}" ${w.id===weekend.id?"selected":""}>${w.label}</option>`).join("")}
+            </select>
+
+            <div class="row" style="gap:8px; margin-top:8px;">
+              <button class="btn" id="btnPrevWeekend">◀ Prev</button>
+              <button class="btn primary" id="btnNextOpenWeekend">Next Open</button>
+              <button class="btn" id="btnNextWeekend">Next ▶</button>
+            </div>
+
+            <div class="small muted" style="margin-top:6px;">${weekend.pickLockText || ""}</div>
+          </div>
+
+          <div class="row" style="justify-content:flex-end;">
+            ${lockButtons}
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="gap:8px;">${eventBadges}</div>
+
+        <div class="divider"></div>
+
+        ${winnerText}
+
+        <div class="divider"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Driver Picks</th>
+              <th class="right">Weekend Total</th>
+            </tr>
+          </thead>
+          <tbody>${pickRows}</tbody>
+        </table>
+
+        <div class="divider"></div>
+
+        <details>
+          <summary class="small">Tiebreak details</summary>
+          <div class="small muted" style="margin:8px 0;">
+            If everyone scores 0, tiebreak = season picks total so far (selected driver WDC points + selected constructor points).
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Picks</th>
+                <th class="right">Weekend</th>
+                <th class="right">Season Picks Total</th>
+              </tr>
+            </thead>
+            <tbody>${scoreDetails}</tbody>
+          </table>
+        </details>
+      </div>
+
+      <div class="card">
+        <strong>Workflow</strong>
+        <ol class="small" style="margin:8px 0 0 18px;">
+          <li>Commissioner enters finishing <em>place</em> in <strong>Commissioner Results</strong>.</li>
+          <li>Family picks drivers here (Sprint + GP if applicable).</li>
+          <li>Lock Sprint pick after Sprint Qualifying, lock GP pick after Qualifying.</li>
+          <li>Winner decides next week’s meal.</li>
+        </ol>
+      </div>
+    </div>
+  `;
+}
+
+function viewSeason() {
+  const driverTotals = computeDriverTotals();
+  const teamTotals = computeTeamTotals(driverTotals);
+  const locked = !!state.seasonLock;
+
+  const rows = players.map(p => {
+    const sp = state.seasonPicks[p];
+    const dPts = sp.driverId ? (driverTotals[sp.driverId] || 0) : 0;
+    const tPts = sp.teamName ? (teamTotals[sp.teamName] || 0) : 0;
+    const total = dPts + tPts;
+
+    return `
+      <tr>
+        <td style="min-width:110px;"><strong>${p}</strong></td>
+        <td>
+          <select data-season="driver" data-player="${p}" ${locked ? "disabled" : ""}>
+            ${driverOptionsHTML(sp.driverId, true)}
+          </select>
+          <div class="small" style="margin-top:6px;">
+            ${sp.driverId ? driverChip(sp.driverId) : `<span class="pill">(no pick)</span>`}
+            <span class="muted" style="margin-left:8px;">pts so far: <span class="mono">${dPts}</span></span>
+          </div>
+        </td>
+        <td>
+          <select data-season="team" data-player="${p}" ${locked ? "disabled" : ""}>
+            ${teamOptionsHTML(sp.teamName, true)}
+          </select>
+          <div class="small" style="margin-top:6px;">
+            ${sp.teamName ? teamChip(sp.teamName) : `<span class="pill">(no pick)</span>`}
+            <span class="muted" style="margin-left:8px;">pts so far: <span class="mono">${tPts}</span></span>
+          </div>
+        </td>
+        <td class="right" style="min-width:120px;"><strong>${total}</strong></td>
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <div class="grid">
+      <div class="card">
+        <div class="row">
+          <div class="grow">
+            <strong>Season Picks</strong>
+            <div class="small">Locks before Race 1. Used for the “all zero weekly tie” tiebreak (Driver + Constructor points so far).</div>
+          </div>
+
+          <span class="pill ${locked ? "danger" : "ok"}">${locked ? "Season Picks Locked" : "Season Picks Open"}</span>
+
+          <button class="btn ${locked ? "" : "primary"}" id="toggleSeasonLock">
+            ${locked ? "Unlock Season Picks" : "Lock Season Picks"}
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Driver Champion Pick</th>
+              <th>Constructor Champion Pick</th>
+              <th class="right">Total So Far</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+
+        <div class="divider"></div>
+
+        <div class="small muted">
+          Tip: If you want this to be “commissioner-only unlock,” I can make the lock one-way (lock only, no unlock button).
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function viewLeaderboards() {
+  const driverTotals = computeDriverTotals();
+  const teamTotals = computeTeamTotals(driverTotals);
+
+  const driverRows = drivers
+    .map(d => ({ id:d.id, team:d.team, pts:driverTotals[d.id] || 0 }))
+    .sort((a,b) => b.pts - a.pts);
+
+  const teamRows = Object.entries(teamTotals)
+    .map(([team, pts]) => ({ team, pts }))
+    .sort((a,b) => b.pts - a.pts);
+
+  return `
+    <div class="grid two">
+      <div class="card">
+        <strong>Drivers</strong>
+        <div class="small">Season totals from entered results.</div>
+        <div class="scroll" style="margin-top:10px;">
+          <table>
+            <thead><tr><th>Driver</th><th>Team</th><th class="right">Pts</th></tr></thead>
+            <tbody>
+              ${driverRows.map(r => `
+                <tr>
+                  <td>${driverChip(r.id)}</td>
+                  <td class="team-cell" style="${teamStyle(r.team)}">${r.team}</td>
+                  <td class="right"><strong>${r.pts}</strong></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Constructors</strong>
+        <div class="small">Sum of both drivers per team.</div>
+        <div class="scroll" style="margin-top:10px;">
+          <table>
+            <thead><tr><th>Team</th><th class="right">Pts</th></tr></thead>
+            <tbody>
+              ${teamRows.map(r => `
+                <tr>
+                  <td class="team-cell" style="${teamStyle(r.team)}">${r.team}</td>
+                  <td class="right"><strong>${r.pts}</strong></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function viewResults() {
+  const weekend = weekends.find(w => w.id === state.ui.selectedWeekendId) || weekends[0];
+
+  // Navigation helpers
+  const idx = Math.max(0, weekends.findIndex(w => w.id === weekend.id));
+
+  const eventCards = weekend.events.map(e => {
+    const when = e.dateTimeText ? `<div class="small muted">${e.dateTimeText}</div>` : "";
+    const rows = drivers.map(d => {
+      const place = (state.results?.[e.id] || {})[d.id] ?? "";
+      const pts = pointsFor(e.type, Number(place || 0));
+      return `
+        <tr>
+          <td>${driverChip(d.id)}</td>
+          <td class="team-cell" style="${teamStyle(d.team)}">${d.team}</td>
+          <td style="min-width:120px;">
+            <div class="row" style="gap:8px; align-items:center;">
+              <input type="number" min="0" step="1"
+                data-driver="${d.id}" data-event="${e.id}"
+                value="${place}"
+                title="Place (blank/0 = no result)"
+              />
+              <span class="pill">${pts} pts</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    return `
+      <div class="card">
+        <div class="row">
+          <div class="grow">
+            <strong>${e.type} — ${e.label}</strong>
+            ${when}
+            <div class="small muted">Enter finishing place for each driver. Points calculate automatically.</div>
+          </div>
+          <span class="pill">${e.type === "SP" ? "Sprint points (Top 8)" : "GP points (Top 10)"}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="scroll" style="max-height: 55vh;">
+          <table>
+            <thead>
+              <tr>
+                <th style="min-width:220px;">Driver</th>
+                <th style="min-width:160px;">Team</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="grid">
+      <div class="card">
+        <div class="row">
+          <div class="grow">
+            <strong>Commissioner Results</strong>
+            <div class="small">One race weekend at a time (no horizontal scrolling).</div>
+          </div>
+          <span class="pill warn">Commissioner-only</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="align-items:flex-end;">
+          <div class="grow">
+            <label class="small">Weekend</label><br/>
+            <select id="resultsWeekendSelect">
+              ${weekends.map(w => `<option value="${w.id}" ${w.id===weekend.id?"selected":""}>${w.label}</option>`).join("")}
+            </select>
+            <div class="small muted" style="margin-top:6px;">Tip: Use Next Open to jump to the next weekend missing results.</div>
+          </div>
+
+          <div class="row" style="justify-content:flex-end;">
+            <button class="btn" id="resultsPrev" ${idx<=0 ? "disabled":""}>Prev</button>
+            <button class="btn primary" id="resultsNextOpen">Next Open</button>
+            <button class="btn" id="resultsNext" ${idx>=weekends.length-1 ? "disabled":""}>Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="subgrid">
+        ${eventCards}
+      </div>
+
+      <div class="card">
+        <details>
+          <summary class="small">Points table</summary>
+          <div class="row" style="align-items:flex-start; margin-top:8px;">
+            <div class="card grow">
+              <strong>Grand Prix</strong>
+              <div class="small mono">${Object.entries(pointsGP).map(([k,v])=>`P${k}:${v}`).join("  ")}</div>
+            </div>
+            <div class="card grow">
+              <strong>Sprint</strong>
+              <div class="small mono">${Object.entries(pointsSP).map(([k,v])=>`P${k}:${v}`).join("  ")}</div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   RENDER + WIRING
+   ========================================================= */
+
+function render() {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.view === state.ui.view));
+
+  const el = document.getElementById("view");
+  const view = state.ui.view;
+
+  if (view === "weekend") el.innerHTML = viewWeekend();
+  else if (view === "season") el.innerHTML = viewSeason();
+  else if (view === "leaderboard") el.innerHTML = viewLeaderboards();
+  else if (view === "results") el.innerHTML = viewResults();
+  else el.innerHTML = viewWeekend();
+
+  wireViewHandlers();
+}
+
+function wireViewHandlers() {
+  // Weekend select
+  const weekendSelect = document.getElementById("weekendSelect");
+  if (weekendSelect) weekendSelect.addEventListener("change", (e) => setSelectedWeekend(e.target.value));
+
+  // Next/Prev shortcuts
+  const btnPrevWeekend = document.getElementById("btnPrevWeekend");
+  if (btnPrevWeekend) btnPrevWeekend.addEventListener("click", () => goPrevWeekend());
+
+  const btnNextWeekend = document.getElementById("btnNextWeekend");
+  if (btnNextWeekend) btnNextWeekend.addEventListener("click", () => goNextWeekend());
+
+  const btnNextOpenWeekend = document.getElementById("btnNextOpenWeekend");
+  if (btnNextOpenWeekend) btnNextOpenWeekend.addEventListener("click", () => goNextOpenWeekend());
+
+  // Per-event lock buttons
+  document.querySelectorAll('button[data-lock-weekend][data-lock-event]').forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const wId = e.target.dataset.lockWeekend;
+      const evId = e.target.dataset.lockEvent;
+      state.lock[wId][evId] = !state.lock[wId][evId];
+      saveState();
+      render();
+    });
+  });
+
+  // Per-event weekly pick selects
+  document.querySelectorAll('select[data-weekend][data-player][data-event]').forEach(sel => {
+    sel.addEventListener("change", (e) => {
+      const wId = e.target.dataset.weekend;
+      const player = e.target.dataset.player;
+      const eventId = e.target.dataset.event;
+      state.weeklyPick[wId][player][eventId] = e.target.value;
+      saveState();
+      render();
+    });
+  });
+
+  // Season picks
+  document.querySelectorAll('select[data-season]').forEach(sel => {
+    sel.addEventListener("change", (e) => {
+      if (state.seasonLock) return; // hard guard
+      const kind = e.target.dataset.season;
+      const player = e.target.dataset.player;
+      if (kind === "driver") state.seasonPicks[player].driverId = e.target.value;
+      if (kind === "team") state.seasonPicks[player].teamName = e.target.value;
+      saveState();
+      render();
+    });
+  });
+
+  // Season lock button
+  const toggleSeasonLock = document.getElementById("toggleSeasonLock");
+  if (toggleSeasonLock) {
+    toggleSeasonLock.addEventListener("click", () => {
+      state.seasonLock = !state.seasonLock;
+      saveState();
+      render();
+    });
+  }
+
+  // Results inputs
+  document.querySelectorAll('input[type="number"][data-event]').forEach(inp => {
+    inp.addEventListener("input", (e) => {
+      const driverId = e.target.dataset.driver;
+      const eventId = e.target.dataset.event;
+      const val = e.target.value === "" ? "" : Number(e.target.value);
+
+      if (!state.results[eventId]) state.results[eventId] = {};
+      if (val === "") delete state.results[eventId][driverId];
+      else state.results[eventId][driverId] = val;
+
+      saveState();
+      render();
+    });
+  });
+
+  // Results weekend select + navigation
+  const resultsWeekendSelect = document.getElementById("resultsWeekendSelect");
+  if (resultsWeekendSelect) {
+    resultsWeekendSelect.addEventListener("change", (e) => setSelectedWeekend(e.target.value));
+  }
+
+  const resultsPrev = document.getElementById("resultsPrev");
+  if (resultsPrev) {
+    resultsPrev.addEventListener("click", () => {
+      const idx = Math.max(0, weekends.findIndex(w => w.id === state.ui.selectedWeekendId));
+      selectWeekendByIndex(idx - 1);
+    });
+  }
+
+  const resultsNext = document.getElementById("resultsNext");
+  if (resultsNext) {
+    resultsNext.addEventListener("click", () => {
+      const idx = Math.max(0, weekends.findIndex(w => w.id === state.ui.selectedWeekendId));
+      selectWeekendByIndex(idx + 1);
+    });
+  }
+
+  const resultsNextOpen = document.getElementById("resultsNextOpen");
+  if (resultsNextOpen) {
+    resultsNextOpen.addEventListener("click", () => {
+      const idx = Math.max(0, weekends.findIndex(w => w.id === state.ui.selectedWeekendId));
+      const nextIdx = findNextWeekend(idx, weekendHasOpenResults);
+      if (nextIdx === -1) {
+        alert("No later weekends with open results found.");
+        return;
+      }
+      selectWeekendByIndex(nextIdx);
+    });
+  }
+}
+
+document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setView(btn.dataset.view)));
+
+/* =========================================================
+   RESET / EXPORT / IMPORT
+   ========================================================= */
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  if (!confirm("Reset all season data (picks + results + locks + season lock)? This cannot be undone.")) return;
+  state = defaultState();
+  saveState();
+  render();
+});
+
+document.getElementById("btnExport").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "spitler-f1-fantasy.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("fileImport").addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const text = await file.text();
+
+  try {
+    const imported = JSON.parse(text);
+    const base = defaultState();
+
+    // results
+    for (const ev of events) base.results[ev.id] = { ...(imported.results?.[ev.id] || {}) };
+
+    // season picks
+    for (const p of players) {
+      base.seasonPicks[p] = {
+        driverId: imported.seasonPicks?.[p]?.driverId || "",
+        teamName: imported.seasonPicks?.[p]?.teamName || ""
+      };
+    }
+
+    // weekly picks + locks
+    for (const w of weekends) {
+      for (const e2 of w.events) base.lock[w.id][e2.id] = !!imported.lock?.[w.id]?.[e2.id];
+      for (const p of players) {
+        for (const e2 of w.events) base.weeklyPick[w.id][p][e2.id] = imported.weeklyPick?.[w.id]?.[p]?.[e2.id] || "";
+      }
+    }
+
+    // season lock
+    base.seasonLock = !!imported.seasonLock;
+
+    // ui
+    base.ui.view = imported.ui?.view || base.ui.view;
+    base.ui.selectedWeekendId = imported.ui?.selectedWeekendId || base.ui.selectedWeekendId;
+
+    state = base;
+    saveState();
+    render();
+    alert("Imported!");
+  } catch {
+    alert("Import failed. Make sure it's a valid JSON export from this app.");
+  } finally {
+    e.target.value = "";
+  }
+});
+async function initApp(){
+  setSaveStatus("Loading…");
+  try {
+    state = await loadStateFromServer();
+    setSaveStatus("Loaded");
+  } catch (e) {
+    state = loadStateFromLocalCache();
+    setSaveStatus("Offline (local cache)");
+  }
+  setTimeout(() => setSaveStatus(""), 1200);
+  render();
+}
+
+initApp();
+</script>
+
+  </div>
+</body>
+</html>
