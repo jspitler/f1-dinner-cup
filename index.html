@@ -304,7 +304,6 @@
   <div id="view"></div>
 
   <div class="row" style="margin-bottom:12px;">
-    <button class="btn" id="btnReset">Reset Season</button>
     <button class="btn" id="btnExport">Export JSON</button>
     <label class="btn" style="display:inline-block;">
       Import JSON
@@ -1486,13 +1485,6 @@ document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", (
 /* =========================================================
    RESET / EXPORT / IMPORT
    ========================================================= */
-
-document.getElementById("btnReset").addEventListener("click", () => {
-  if (!confirm("Reset all season data (picks + results + locks + season lock)? This cannot be undone.")) return;
-  state = defaultState();
-  saveState();
-  render();
-});
 
 document.getElementById("btnExport").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
