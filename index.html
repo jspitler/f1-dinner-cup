@@ -323,59 +323,58 @@
    CONFIG
    ========================================================= */
 const API_BASE = "https://f1-dinner-cup-api.spitlerj07.workers.dev";
+const jolpico_BASE = "https://api.jolpi.ca/ergast/f1";
+const jolpico_SEASON = "2026";
 	
 const players = ["Jason", "Erika", "Archer"];
 
 const teamColors = {
-  "Alpine":          { bg: "#061a4d", fg: "#FF88BD" },
-  "Aston Martin":    { bg: "#00665e", fg: "#b9c600" },
-  "Audi":            { bg: "#101319", fg: "#ffffff" },
-  "Cadillac":        { bg: "#ffffff", fg: "#000000" },
-  "Ferrari":         { bg: "#da291c", fg: "#ffffff" },
-  "Haas":            { bg: "#e6002d", fg: "#000000" },
-  "McLaren":         { bg: "#ff8000", fg: "#ffffff" },
-  "Mercedes":        { bg: "#00f5d0", fg: "#00a39e" },
-  "Racing Bulls":    { bg: "#070b36", fg: "#ffffff" },
-  "Red Bull Racing": { bg: "#00162b", fg: "#db0a40" },
-  "Williams":        { bg: "#041E42", fg: "#00A3E0" },
+  "alpine":         { bg: "#061a4d", fg: "#FF88BD" },
+  "aston_martin":   { bg: "#00665e", fg: "#b9c600" },
+  "audi":           { bg: "#101319", fg: "#ffffff" },
+  "cadillac":       { bg: "#ffffff", fg: "#000000" },
+  "ferrari":        { bg: "#da291c", fg: "#ffffff" },
+  "haas":           { bg: "#e6002d", fg: "#000000" },
+  "mclaren":        { bg: "#ff8000", fg: "#ffffff" },
+  "mercedes":       { bg: "#00f5d0", fg: "#00a39e" },
+  "rb":    			{ bg: "#070b36", fg: "#ffffff" },
+  "red_bull": 		{ bg: "#00162b", fg: "#db0a40" },
+  "williams":       { bg: "#041E42", fg: "#00A3E0" },
 };
 
 const drivers = [
-  { id: "ALP_GAS", team: "Alpine", name: "Pierre Gasly" },
-  { id: "ALP_COL", team: "Alpine", name: "Franco Colapinto" },
-
-  { id: "AM_ALO", team: "Aston Martin", name: "Fernando Alonso" },
-  { id: "AM_STR", team: "Aston Martin", name: "Lance Stroll" },
-
-  { id: "AUD_HUL", team: "Audi", name: "Nico Hulkenberg" },
-  { id: "AUD_BOR", team: "Audi", name: "Gabriel Bortoletto" },
-
-  { id: "CAD_PER", team: "Cadillac", name: "Sergio Perez" },
-  { id: "CAD_BOT", team: "Cadillac", name: "Valtteri Bottas" },
-
-  { id: "FER_LEC", team: "Ferrari", name: "Charles Leclerc" },
-  { id: "FER_HAM", team: "Ferrari", name: "Lewis Hamilton" },
-
-  { id: "HAA_OCO", team: "Haas", name: "Esteban Ocon" },
-  { id: "HAA_BEA", team: "Haas", name: "Oliver Bearman" },
-
-  { id: "MCL_NOR", team: "McLaren", name: "Lando Norris" },
-  { id: "MCL_PIA", team: "McLaren", name: "Oscar Piastri" },
-
-  { id: "MER_RUS", team: "Mercedes", name: "George Russell" },
-  { id: "MER_ANT", team: "Mercedes", name: "Kimi Antonelli" },
-
-  { id: "RB_LAW", team: "Racing Bulls", name: "Liam Lawson" },
-  { id: "RB_LIN", team: "Racing Bulls", name: "Arvid Lindblad" },
-
-  { id: "RBR_VER", team: "Red Bull Racing", name: "Max Verstappen" },
-  { id: "RBR_HAD", team: "Red Bull Racing", name: "Isack Hadjar" },
-
-  { id: "WIL_SAI", team: "Williams", name: "Carlos Sainz" },
-  { id: "WIL_ALB", team: "Williams", name: "Alex Albon" },
+  { driverId: "gasly",  constructorId: "alpine", team: "Alpine F1 Team", familyName: "Gasly", displayName: "Pierre Gasly", number: "10" },
+  { driverId: "colapinto", constructorId: "alpine", team: "Alpine F1 Team", familyName: "Colapinto", displayName: "Franco Colapinto", number: "43" },
+  { driverId: "alonso", constructorId: "aston_martin", team: "Aston Martin", familyName: "Alonso", displayName: "Fernando Alonso", number: "14" },
+  { driverId: "stroll", constructorId: "aston_martin", team: "Aston Martin", familyName: "Stroll", displayName: "Lance Stroll", number: "18" },
+  { driverId: "hulkenberg", constructorId: "audi", team: "Audi", familyName: "Hulkenberg", displayName: "Nico Hulkenberg", number: "27" },
+  { driverId: "bortoleto", constructorId: "audi", team: "Audi", familyName: "Bortoleto", displayName: "Gabriel Bortoleto", number: "5" },
+  { driverId: "perez", constructorId: "cadillac", team: "Cadillac F1 Team", familyName: "Perez", displayName: "Sergio Perez", number: "11" },
+  { driverId: "bottas", constructorId: "cadillac", team: "Cadillac F1 Team", familyName: "Bottas", displayName: "Valtteri Bottas", number: "77" },
+  { driverId: "leclerc", constructorId: "ferrari", team: "Ferrari", familyName: "Leclerc", displayName: "Charles Leclerc", number: "16" },
+  { driverId: "hamilton", constructorId: "ferrari", team: "Ferrari", familyName: "Hamilton", displayName: "Lewis Hamilton", number: "44" },
+  { driverId: "ocon", constructorId: "haas", team: "Haas F1 Team", familyName: "Ocon", displayName: "Esteban Ocon", number: "31" },
+  { driverId: "bearman", constructorId: "haas", team: "Haas F1 Team", familyName: "Bearman", displayName: "Oliver Bearman", number: "87" },
+  { driverId: "norris", constructorId: "mclaren", team: "McLaren", familyName: "Norris", displayName: "Lando Norris", number: "1" },
+  { driverId: "piastri", constructorId: "mclaren", team: "McLaren", familyName: "Piastri", displayName: "Oscar Piastri", number: "81" },
+  { driverId: "russell", constructorId: "mercedes", team: "Mercedes", familyName: "Russell", displayName: "George Russell", number: "63" },
+  { driverId: "antonelli", constructorId: "mercedes", team: "Mercedes", familyName: "Antonelli", displayName: "Kimi Antonelli", number: "12" },
+  { driverId: "lawson", constructorId: "rb", team: "RB F1 Team", familyName: "Lawson", displayName: "Liam Lawson", number: "30" },
+  { driverId: "arvid_lindblad", constructorId: "rb", team: "RB F1 Team", familyName: "Lindblad", displayName: "Arvid Lindblad", number: "41" },
+  { driverId: "max_verstappen", constructorId: "red_bull", team: "Red Bull", familyName: "Verstappen", displayName: "Max Verstappen", number: "3" },
+  { driverId: "hadjar", constructorId: "red_bull", team: "Red Bull", familyName: "Hadjar", displayName: "Isack Hadjar", number: "6" },
+  { driverId: "sainz", constructorId: "williams", team: "Williams", familyName: "Sainz", displayName: "Carlos Sainz", number: "55" },
+  { driverId: "albon", constructorId: "williams", team: "Williams", familyName: "Albon", displayName: "Alex Albon", number: "23" },
 ];
 
 const teams = [...new Set(drivers.map(d => d.team))].sort();
+const constructorIdByTeam = Object.fromEntries(drivers.map(d => [d.team, d.constructorId]));
+const jolpico_DRIVER_ID_ALIASES = {
+  verstappen: "max_verstappen",
+  lindblad: "arvid_lindblad",
+  arvid_lindblad: "arvid_lindblad",
+  bortoletto: "bortoleto",
+};
 // IMPORTANT: sprint weekends should include BOTH SP + GP events inside one weekend.
 // You can expand this list for the full season.
 const weekends = [
@@ -406,175 +405,159 @@ const weekends = [
   },
   {
     id: "4",
-    label: "Bahrain GP (Round 4)",
-    pickLockText: "Lock GP pick after Qualifying",
+    label: "Miami Sprint + GP (Round 4)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
     events: [
-      { id: "GP4", label: "Bahrain GP @ Bahrain Int’l", type: "GP", dateTimeText: "Sunday 4/12 @ 11:00 AM" }
+      { id: "SP2", label: "Miami Sprint @ Miami Int’l Autodrome", type: "SP", dateTimeText: "Saturday 5/2 @ 12:00 PM" },
+      { id: "GP4", label: "Miami GP @ Miami Int’l Autodrome", type: "GP", dateTimeText: "Sunday 5/3 @ 4:00 PM" }
     ]
   },
   {
     id: "5",
-    label: "Saudi Arabian GP (Round 5)",
-    pickLockText: "Lock GP pick after Qualifying",
+    label: "Canadian Sprint + GP (Round 5)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
     events: [
-      { id: "GP5", label: "Saudi Arabian GP @ Jeddah Corniche", type: "GP", dateTimeText: "Sunday 4/19 @ 1:00 PM" }
+      { id: "SP3", label: "Canadian Sprint @ Circuit Gilles Villeneuve", type: "SP", dateTimeText: "Saturday 5/23 @ 12:00 PM" },
+      { id: "GP5", label: "Canadian GP @ Circuit Gilles Villeneuve", type: "GP", dateTimeText: "Sunday 5/24 @ 4:00 PM" }
     ]
   },
   {
     id: "6",
-    label: "Miami Sprint + GP (Round 6)",
-    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    label: "Monaco GP (Round 6)",
+    pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "SP2", label: "Miami Sprint @ Miami Int’l Autodrome", type: "SP", dateTimeText: "Saturday 5/2 @ 12:00 PM" },
-      { id: "GP6", label: "Miami GP @ Miami Int’l Autodrome", type: "GP", dateTimeText: "Sunday 5/3 @ 4:00 PM" }
+      { id: "GP6", label: "Monaco GP @ Circuit de Monaco", type: "GP", dateTimeText: "Sunday 6/7 @ 9:00 AM" }
     ]
   },
   {
     id: "7",
-    label: "Canadian Sprint + GP (Round 7)",
-    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    label: "Barcelona GP (Round 7)",
+    pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "SP3", label: "Canadian Sprint @ Circuit Gilles Villeneuve", type: "SP", dateTimeText: "Saturday 5/23 @ 12:00 PM" },
-      { id: "GP7", label: "Canadian GP @ Circuit Gilles Villeneuve", type: "GP", dateTimeText: "Sunday 5/24 @ 4:00 PM" }
+      { id: "GP7", label: "Barcelona GP @ Circuit de Barcelona-Catalunya", type: "GP", dateTimeText: "Sunday 6/14 @ 9:00 AM" }
     ]
   },
   {
     id: "8",
-    label: "Monaco GP (Round 8)",
+    label: "Austrian GP (Round 8)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP8", label: "Monaco GP @ Circuit de Monaco", type: "GP", dateTimeText: "Sunday 6/7 @ 9:00 AM" }
+      { id: "GP8", label: "Austrian GP @ Red Bull Ring", type: "GP", dateTimeText: "Sunday 6/28 @ 9:00 AM" }
     ]
   },
   {
     id: "9",
-    label: "Barcelona GP (Round 9)",
-    pickLockText: "Lock GP pick after Qualifying",
+    label: "British Sprint + GP (Round 9)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
     events: [
-      { id: "GP9", label: "Barcelona GP @ Circuit de Barcelona-Catalunya", type: "GP", dateTimeText: "Sunday 6/14 @ 9:00 AM" }
+      { id: "SP4", label: "British Sprint @ Silverstone", type: "SP", dateTimeText: "Saturday 7/4 @ 7:00 AM" },
+      { id: "GP9", label: "British GP @ Silverstone", type: "GP", dateTimeText: "Sunday 7/5 @ 10:00 AM" }
     ]
   },
   {
     id: "10",
-    label: "Austrian GP (Round 10)",
+    label: "Belgian GP (Round 10)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP10", label: "Austrian GP @ Red Bull Ring", type: "GP", dateTimeText: "Sunday 6/28 @ 9:00 AM" }
+      { id: "GP10", label: "Belgian GP @ Spa-Francorchamps", type: "GP", dateTimeText: "Sunday 7/19 @ 9:00 AM" }
     ]
   },
   {
     id: "11",
-    label: "British Sprint + GP (Round 11)",
-    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    label: "Hungarian GP (Round 11)",
+    pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "SP4", label: "British Sprint @ Silverstone", type: "SP", dateTimeText: "Saturday 7/4 @ 7:00 AM" },
-      { id: "GP11", label: "British GP @ Silverstone", type: "GP", dateTimeText: "Sunday 7/5 @ 10:00 AM" }
+      { id: "GP11", label: "Hungarian GP @ Hungaroring", type: "GP", dateTimeText: "Sunday 7/26 @ 9:00 AM" }
     ]
   },
   {
     id: "12",
-    label: "Belgian GP (Round 12)",
-    pickLockText: "Lock GP pick after Qualifying",
+    label: "Dutch Sprint + GP (Round 12)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
     events: [
-      { id: "GP12", label: "Belgian GP @ Spa-Francorchamps", type: "GP", dateTimeText: "Sunday 7/19 @ 9:00 AM" }
+      { id: "SP5", label: "Dutch Sprint @ Circuit Zandvoort", type: "SP", dateTimeText: "Saturday 8/22 @ 6:00 AM" },
+      { id: "GP12", label: "Dutch GP @ Circuit Zandvoort", type: "GP", dateTimeText: "Sunday 8/23 @ 9:00 AM" }
     ]
   },
   {
     id: "13",
-    label: "Hungarian GP (Round 13)",
+    label: "Italian GP (Round 13)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP13", label: "Hungarian GP @ Hungaroring", type: "GP", dateTimeText: "Sunday 7/26 @ 9:00 AM" }
+      { id: "GP13", label: "Italian GP @ Autodromo Nazionale Monza", type: "GP", dateTimeText: "Sunday 9/6 @ 9:00 AM" }
     ]
   },
   {
     id: "14",
-    label: "Dutch Sprint + GP (Round 14)",
-    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    label: "Spanish GP (Round 14)",
+    pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "SP5", label: "Dutch Sprint @ Circuit Zandvoort", type: "SP", dateTimeText: "Saturday 8/22 @ 6:00 AM" },
-      { id: "GP14", label: "Dutch GP @ Circuit Zandvoort", type: "GP", dateTimeText: "Sunday 8/23 @ 9:00 AM" }
+      { id: "GP14", label: "Spanish GP @ Madring Street Circuit", type: "GP", dateTimeText: "Sunday 9/13 @ 9:00 AM" }
     ]
   },
   {
     id: "15",
-    label: "Italian GP (Round 15)",
+    label: "Azerbaijan GP (Round 15)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP15", label: "Italian GP @ Autodromo Nazionale Monza", type: "GP", dateTimeText: "Sunday 9/6 @ 9:00 AM" }
+      { id: "GP15", label: "Azerbaijan GP @ Baku City Circuit", type: "GP", dateTimeText: "Saturday 9/26 @ 7:00 AM" }
     ]
   },
   {
     id: "16",
-    label: "Spanish GP (Round 16)",
-    pickLockText: "Lock GP pick after Qualifying",
+    label: "Singapore Sprint + GP (Round 16)",
+    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
     events: [
-      { id: "GP16", label: "Spanish GP @ Madring Street Circuit", type: "GP", dateTimeText: "Sunday 9/13 @ 9:00 AM" }
+      { id: "SP6", label: "Singapore Sprint @ Marina Bay Street Circuit", type: "SP", dateTimeText: "Saturday 10/10 @ 5:00 AM" },
+      { id: "GP16", label: "Singapore GP @ Marina Bay Street Circuit", type: "GP", dateTimeText: "Sunday 10/11 @ 8:00 AM" }
     ]
   },
   {
     id: "17",
-    label: "Azerbaijan GP (Round 17)",
+    label: "United States GP (Round 17)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP17", label: "Azerbaijan GP @ Baku City Circuit", type: "GP", dateTimeText: "Saturday 9/26 @ 7:00 AM" }
+      { id: "GP17", label: "United States GP @ Circuit of the Americas", type: "GP", dateTimeText: "Sunday 10/25 @ 4:00 PM" }
     ]
   },
   {
     id: "18",
-    label: "Singapore Sprint + GP (Round 18)",
-    pickLockText: "Two-stage lock: Sprint after Sprint Qualifying, GP after Qualifying",
+    label: "Mexico GP (Round 18)",
+    pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "SP6", label: "Singapore Sprint @ Marina Bay Street Circuit", type: "SP", dateTimeText: "Saturday 10/10 @ 5:00 AM" },
-      { id: "GP18", label: "Singapore GP @ Marina Bay Street Circuit", type: "GP", dateTimeText: "Sunday 10/11 @ 8:00 AM" }
+      { id: "GP18", label: "Mexico GP @ Autódromo Hermanos Rodríguez", type: "GP", dateTimeText: "Sunday 11/1 @ 3:00 PM" }
     ]
   },
   {
     id: "19",
-    label: "United States GP (Round 19)",
+    label: "Brazilian GP (Round 19)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP19", label: "United States GP @ Circuit of the Americas", type: "GP", dateTimeText: "Sunday 10/25 @ 4:00 PM" }
+      { id: "GP19", label: "Brazilian GP @ Interlagos", type: "GP", dateTimeText: "Sunday 11/8 @ 12:00 PM" }
     ]
   },
   {
     id: "20",
-    label: "Mexico GP (Round 20)",
+    label: "Las Vegas GP (Round 20)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP20", label: "Mexico GP @ Autódromo Hermanos Rodríguez", type: "GP", dateTimeText: "Sunday 11/1 @ 3:00 PM" }
+      { id: "GP20", label: "Las Vegas GP @ Las Vegas Street Circuit", type: "GP", dateTimeText: "Saturday 11/21 @ 11:00 PM" }
     ]
   },
   {
     id: "21",
-    label: "Brazilian GP (Round 21)",
+    label: "Qatar GP (Round 21)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP21", label: "Brazilian GP @ Interlagos", type: "GP", dateTimeText: "Sunday 11/8 @ 12:00 PM" }
+      { id: "GP21", label: "Qatar GP @ Lusail Int’l Circuit", type: "GP", dateTimeText: "Sunday 11/29 @ 11:00 AM" }
     ]
   },
   {
     id: "22",
-    label: "Las Vegas GP (Round 22)",
+    label: "Abu Dhabi GP (Round 22)",
     pickLockText: "Lock GP pick after Qualifying",
     events: [
-      { id: "GP22", label: "Las Vegas GP @ Las Vegas Street Circuit", type: "GP", dateTimeText: "Saturday 11/21 @ 11:00 PM" }
-    ]
-  },
-  {
-    id: "23",
-    label: "Qatar GP (Round 23)",
-    pickLockText: "Lock GP pick after Qualifying",
-    events: [
-      { id: "GP23", label: "Qatar GP @ Lusail Int’l Circuit", type: "GP", dateTimeText: "Sunday 11/29 @ 11:00 AM" }
-    ]
-  },
-  {
-    id: "24",
-    label: "Abu Dhabi GP (Round 24)",
-    pickLockText: "Lock GP pick after Qualifying",
-    events: [
-      { id: "GP24", label: "Abu Dhabi GP @ Yas Marina Circuit", type: "GP", dateTimeText: "Sunday 12/6 @ 8:00 AM" }
+      { id: "GP22", label: "Abu Dhabi GP @ Yas Marina Circuit", type: "GP", dateTimeText: "Sunday 12/6 @ 8:00 AM" }
     ]
   },
 ];
@@ -701,25 +684,30 @@ function saveState() {
    HELPERS
    ========================================================= */
 
+function colorForTeam(team) {
+  const constructorId = constructorIdByTeam[team] || team;
+  return teamColors[constructorId] || null;
+}
+
 function teamStyle(team) {
-  const c = teamColors[team];
+  const c = colorForTeam(team);
   if (!c) return "";
   return `background:${c.bg}; color:${c.fg};`;
 }
 
-function driverById(id){ return drivers.find(d => d.id === id) || null; }
+function driverById(id){ return drivers.find(d => d.driverId === id) || null; }
 
 function driverChip(driverId) {
   const d = driverById(driverId);
   if (!d) return `<span class="pill">(none)</span>`;
-  const c = teamColors[d.team] || { bg:"#f2f2f2", fg:"#111" };
+  const c = teamColors[d.constructorId] || { bg:"#f2f2f2", fg:"#111" };
   return `<span class="chip" style="background:${c.bg}; color:${c.fg};">
-    <span class="chip-dot"></span>${d.name}
+    <span class="chip-dot"></span>${d.displayName}
   </span>`;
 }
 
 function teamChip(team) {
-  const c = teamColors[team] || { bg:"#f2f2f2", fg:"#111" };
+  const c = colorForTeam(team) || { bg:"#f2f2f2", fg:"#111" };
   return `<span class="chip" style="background:${c.bg}; color:${c.fg};">
     <span class="chip-dot"></span>${team}
   </span>`;
@@ -727,18 +715,18 @@ function teamChip(team) {
 
 // Driver dropdown options: driver name only (no team label)
 function driverOptionsHTML(selectedId, includeBlank=true) {
-  const sorted = drivers.slice().sort((a,b) => a.name.localeCompare(b.name));
+  const sorted = drivers.slice().sort((a,b) => a.displayName.localeCompare(b.displayName));
   const opts = sorted.map(d => {
-    const c = teamColors[d.team] || {};
+    const c = teamColors[d.constructorId] || {};
     const style = c.bg ? `style="background:${c.bg}; color:${c.fg};"` : "";
-    return `<option value="${d.id}" ${d.id===selectedId?"selected":""} ${style}>${d.name}</option>`;
+    return `<option value="${d.driverId}" ${d.driverId===selectedId?"selected":""} ${style}>${d.displayName}</option>`;
   }).join("");
   return (includeBlank ? `<option value="" ${!selectedId?"selected":""}>(select)</option>` : "") + opts;
 }
 
 function teamOptionsHTML(selectedTeam, includeBlank=true) {
   const opts = teams.map(t => {
-    const c = teamColors[t] || {};
+    const c = colorForTeam(t) || {};
     const style = c.bg ? `style="background:${c.bg}; color:${c.fg};"` : "";
     return `<option value="${t}" ${t===selectedTeam?"selected":""} ${style}>${t}</option>`;
   }).join("");
@@ -809,7 +797,7 @@ function weekendHasOpenResults(weekend){
   // "open" means results are not fully entered (any blank/0 for any driver for any event in the weekend)
   return weekend.events.some(e => {
     const evRes = state.results?.[e.id] || {};
-    return drivers.some(d => !evRes[d.id] || Number(evRes[d.id]) <= 0);
+    return drivers.some(d => !evRes[d.driverId] || Number(evRes[d.driverId]) <= 0);
   });
 }
 
@@ -825,6 +813,116 @@ function findNextWeekend(fromIndex, predicate){
   return -1;
 }
 
+
+/* =========================================================
+   Jolpico RESULTS IMPORT
+   ========================================================= */
+
+function jolpicoRoundForWeekend(weekend) {
+  return weekend.jolpicoRound || weekend.round || weekend.id;
+}
+
+function jolpicoUrlForEvent(weekend, event) {
+  const round = jolpicoRoundForWeekend(weekend);
+  const endpoint = event.type === "SP" ? "sprint" : "results";
+  return `${jolpico_BASE}/${jolpico_SEASON}/${round}/${endpoint}.json`;
+}
+
+function localDriverIdFromjolpico(jolpicoDriverId) {
+  if (!jolpicoDriverId) return "";
+  const normalized = String(jolpicoDriverId).toLowerCase();
+  if (drivers.some(d => d.driverId === normalized)) return normalized;
+  return jolpico_DRIVER_ID_ALIASES[normalized] || "";
+}
+
+function extractjolpicoClassifications(data, eventType) {
+  const races = data?.MRData?.RaceTable?.Races || [];
+  const race = races[0];
+  if (!race) return [];
+  return eventType === "SP" ? (race.SprintResults || []) : (race.Results || []);
+}
+
+async function fetchjolpicoResultsForEvent(weekend, event) {
+  const url = jolpicoUrlForEvent(weekend, event);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${event.label}: Jolpico returned ${res.status}`);
+
+  const data = await res.json();
+  const classifications = extractjolpicoClassifications(data, event.type);
+  if (!classifications.length) throw new Error(`${event.label}: no ${event.type === "SP" ? "sprint" : "race"} results found`);
+
+  if (!state.results[event.id]) state.results[event.id] = {};
+
+  const imported = [];
+  const unmatched = [];
+  for (const row of classifications) {
+    const jolpicoDriverId = row?.Driver?.driverId || "";
+    const localDriverId = localDriverIdFromjolpico(jolpicoDriverId);
+    const place = Number(row.positionOrder || row.position || 0);
+    if (!localDriverId || !place) {
+      unmatched.push(jolpicoDriverId || "unknown");
+      continue;
+    }
+    state.results[event.id][localDriverId] = place;
+    imported.push(localDriverId);
+  }
+
+  return { eventId: event.id, label: event.label, imported, unmatched, url };
+}
+
+async function fetchjolpicoResultsForSelectedWeekend() {
+  const weekend = weekends.find(w => w.id === state.ui.selectedWeekendId) || weekends[0];
+  setSaveStatus("Fetching Jolpico…");
+
+  const summaries = [];
+  const errors = [];
+  for (const event of weekend.events) {
+    try {
+      summaries.push(await fetchjolpicoResultsForEvent(weekend, event));
+    } catch (err) {
+      errors.push(err.message || String(err));
+    }
+  }
+
+  saveState();
+  render();
+
+  const importedCount = summaries.reduce((sum, item) => sum + item.imported.length, 0);
+  const unmatched = summaries.flatMap(item => item.unmatched);
+  const lines = [];
+  if (importedCount) lines.push(`Imported ${importedCount} result entries from Jolpico.`);
+  if (unmatched.length) lines.push(`Unmatched Jolpico driver IDs: ${[...new Set(unmatched)].join(", ")}`);
+  if (errors.length) lines.push(`Skipped: ${errors.join(" | ")}`);
+  if (!lines.length) lines.push("No Jolpico results were imported.");
+  alert(lines.join("\n"));
+}
+
+async function fetchjolpicoResultsForAllWeekends() {
+  setSaveStatus("Fetching Jolpico…");
+  const summaries = [];
+  const errors = [];
+
+  for (const weekend of weekends) {
+    for (const event of weekend.events) {
+      try {
+        summaries.push(await fetchjolpicoResultsForEvent(weekend, event));
+      } catch (err) {
+        errors.push(err.message || String(err));
+      }
+    }
+  }
+
+  saveState();
+  render();
+
+  const importedCount = summaries.reduce((sum, item) => sum + item.imported.length, 0);
+  const unmatched = summaries.flatMap(item => item.unmatched);
+  const lines = [`Imported ${importedCount} result entries from Jolpico.`];
+  if (unmatched.length) lines.push(`Unmatched Jolpico driver IDs: ${[...new Set(unmatched)].join(", ")}`);
+  if (errors.length) lines.push(`Skipped ${errors.length} event(s) with no available Jolpico data yet.`);
+  alert(lines.join("\n"));
+}
+
 /* =========================================================
    SCORING
    ========================================================= */
@@ -838,13 +936,13 @@ function pointsFor(eventType, place) {
 
 function computeDriverTotals() {
   const totals = {};
-  for (const d of drivers) totals[d.id] = 0;
+  for (const d of drivers) totals[d.driverId] = 0;
 
   for (const e of events) {
     const evRes = state.results[e.id] || {};
     for (const d of drivers) {
-      const place = Number(evRes[d.id] || 0);
-      totals[d.id] += pointsFor(e.type, place);
+      const place = Number(evRes[d.driverId] || 0);
+      totals[d.driverId] += pointsFor(e.type, place);
     }
   }
   return totals;
@@ -854,7 +952,7 @@ function computeTeamTotals(driverTotals) {
   const teamTotals = {};
   for (const t of teams) teamTotals[t] = 0;
   for (const d of drivers) {
-    teamTotals[d.team] = (teamTotals[d.team] || 0) + (driverTotals[d.id] || 0);
+    teamTotals[d.team] = (teamTotals[d.team] || 0) + (driverTotals[d.driverId] || 0);
   }
   return teamTotals;
 }
@@ -1178,7 +1276,7 @@ function viewLeaderboards() {
   const teamTotals = computeTeamTotals(driverTotals);
 
   const driverRows = drivers
-    .map(d => ({ id:d.id, team:d.team, pts:driverTotals[d.id] || 0 }))
+    .map(d => ({ id:d.driverId, team:d.team, pts:driverTotals[d.driverId] || 0 }))
     .sort((a,b) => b.pts - a.pts);
 
   const teamRows = Object.entries(teamTotals)
@@ -1236,16 +1334,16 @@ function viewResults() {
   const eventCards = weekend.events.map(e => {
     const when = e.dateTimeText ? `<div class="small muted">${e.dateTimeText}</div>` : "";
     const rows = drivers.map(d => {
-      const place = (state.results?.[e.id] || {})[d.id] ?? "";
+      const place = (state.results?.[e.id] || {})[d.driverId] ?? "";
       const pts = pointsFor(e.type, Number(place || 0));
       return `
         <tr>
-          <td>${driverChip(d.id)}</td>
+          <td>${driverChip(d.driverId)}</td>
           <td class="team-cell" style="${teamStyle(d.team)}">${d.team}</td>
           <td style="min-width:120px;">
             <div class="row" style="gap:8px; align-items:center;">
               <input type="number" min="0" step="1"
-                data-driver="${d.id}" data-event="${e.id}"
+                data-driver="${d.driverId}" data-event="${e.id}"
                 value="${place}"
                 title="Place (blank/0 = no result)"
               />
@@ -1262,7 +1360,7 @@ function viewResults() {
           <div class="grow">
             <strong>${e.type} — ${e.label}</strong>
             ${when}
-            <div class="small muted">Enter finishing place for each driver. Points calculate automatically.</div>
+            <div class="small muted">Jolpico fills finishing places automatically. You can still edit any result manually.</div>
           </div>
           <span class="pill">${e.type === "SP" ? "Sprint points (Top 8)" : "GP points (Top 10)"}</span>
         </div>
@@ -1291,9 +1389,11 @@ function viewResults() {
         <div class="row">
           <div class="grow">
             <strong>Commissioner Results</strong>
-            <div class="small">One race weekend at a time (no horizontal scrolling).</div>
+            <div class="small">Fetch race and sprint classifications from Jolpico, then edit manually if needed.</div>
           </div>
           <span class="pill warn">Commissioner-only</span>
+          <button class="btn primary" id="resultsFetchjolpico">Fetch Weekend from Jolpico</button>
+          <button class="btn" id="resultsFetchAlljolpico">Fetch All Available</button>
         </div>
 
         <div class="divider"></div>
@@ -1304,7 +1404,7 @@ function viewResults() {
             <select id="resultsWeekendSelect">
               ${weekends.map(w => `<option value="${w.id}" ${w.id===weekend.id?"selected":""}>${w.label}</option>`).join("")}
             </select>
-            <div class="small muted" style="margin-top:6px;">Tip: Use Next Open to jump to the next weekend missing results.</div>
+            <div class="small muted" style="margin-top:6px;">Jolpico lookup uses season <span class="mono">${jolpico_SEASON}</span> and round <span class="mono">${jolpicoRoundForWeekend(weekend)}</span>. You only need to edit event names if the round numbers stop matching.</div>
           </div>
 
           <div class="row" style="justify-content:flex-end;">
@@ -1416,6 +1516,25 @@ function wireViewHandlers() {
       state.seasonLock = !state.seasonLock;
       saveState();
       render();
+    });
+  }
+
+  // Jolpico results import
+  const resultsFetchjolpico = document.getElementById("resultsFetchjolpico");
+  if (resultsFetchjolpico) {
+    resultsFetchjolpico.addEventListener("click", async () => {
+      resultsFetchjolpico.disabled = true;
+      try { await fetchjolpicoResultsForSelectedWeekend(); }
+      finally { resultsFetchjolpico.disabled = false; }
+    });
+  }
+
+  const resultsFetchAlljolpico = document.getElementById("resultsFetchAlljolpico");
+  if (resultsFetchAlljolpico) {
+    resultsFetchAlljolpico.addEventListener("click", async () => {
+      resultsFetchAlljolpico.disabled = true;
+      try { await fetchjolpicoResultsForAllWeekends(); }
+      finally { resultsFetchAlljolpico.disabled = false; }
     });
   }
 
