@@ -12,7 +12,7 @@
 
 	<style>
 	/* =========================================
-	   F1 DARK THEME (Clean Rebuild-11:52AM)
+	   F1 DARK THEME
 	========================================= */
 
 	:root{
@@ -305,6 +305,7 @@
     <button class="tab active" data-view="weekend">Race Weekend</button>
     <button class="tab" data-view="season">Season Picks</button>
     <button class="tab" data-view="leaderboard">Leaderboards</button>
+    <button class="tab" data-view="weeklyWinners">Weekly Winners</button>
     <button class="tab" data-view="results">Commissioner Results</button>
   </div>
   <div id="view"></div>
@@ -1005,6 +1006,25 @@ function computeWeekendWinner(weekend) {
   return { type:"tie", winners: topWeekend.map(x => x.player), scores, tieReason:"weekend" };
 }
 
+
+function hasWeekendOccurred(weekend) {
+  // Treat a weekend as occurred only after every event in that weekend
+  // has at least one entered finishing place. This keeps future weekends
+  // off the Weekly Winners page until results exist.
+  return weekend.events.every(e => {
+    const evRes = state.results?.[e.id] || {};
+    return Object.values(evRes).some(place => Number(place || 0) > 0);
+  });
+}
+
+function weeklyWinnerDisplay(winner) {
+  if (!winner) return "";
+  if (winner.type === "winner") return winner.winner;
+  if (winner.type === "tiebreak_winner") return `${winner.winner} <span class="pill">tiebreak</span>`;
+  if (winner.type === "tie") return `Tie: ${winner.winners.join(" & ")}`;
+  return "";
+}
+
 /* =========================================================
    VIEWS
    ========================================================= */
@@ -1325,6 +1345,49 @@ function viewLeaderboards() {
   `;
 }
 
+
+function viewWeeklyWinners() {
+  const occurredWeekends = weekends.filter(hasWeekendOccurred);
+
+  const rows = occurredWeekends.map(w => {
+    const winner = computeWeekendWinner(w);
+    return `
+      <tr>
+        <td><strong>${w.label}</strong></td>
+        <td>${weeklyWinnerDisplay(winner)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <div class="grid">
+      <div class="card">
+        <div class="row">
+          <div class="grow">
+            <strong>Weekly Winners</strong>
+            <div class="small">Race weekends are shown only after results have been entered for that weekend.</div>
+          </div>
+          <span class="pill">${occurredWeekends.length} completed</span>
+        </div>
+
+        <div class="divider"></div>
+
+        ${occurredWeekends.length ? `
+          <table>
+            <thead>
+              <tr>
+                <th>Race Weekend</th>
+                <th>Person Winner</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        ` : `<div class="small muted">No completed race weekends yet.</div>`}
+      </div>
+    </div>
+  `;
+}
+
 function viewResults() {
   const weekend = weekends.find(w => w.id === state.ui.selectedWeekendId) || weekends[0];
 
@@ -1452,6 +1515,7 @@ function render() {
   if (view === "weekend") el.innerHTML = viewWeekend();
   else if (view === "season") el.innerHTML = viewSeason();
   else if (view === "leaderboard") el.innerHTML = viewLeaderboards();
+  else if (view === "weeklyWinners") el.innerHTML = viewWeeklyWinners();
   else if (view === "results") el.innerHTML = viewResults();
   else el.innerHTML = viewWeekend();
 
