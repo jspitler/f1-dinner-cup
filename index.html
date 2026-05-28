@@ -323,8 +323,8 @@
    CONFIG
    ========================================================= */
 const API_BASE = "https://f1-dinner-cup-api.spitlerj07.workers.dev";
-const jolpico_BASE = "https://api.jolpi.ca/ergast/f1";
-const jolpico_SEASON = "2026";
+const jolpica_BASE = "https://api.jolpi.ca/ergast/f1";
+const jolpica_SEASON = "2026";
 	
 const players = ["Jason", "Erika", "Archer"];
 
@@ -369,7 +369,7 @@ const drivers = [
 
 const teams = [...new Set(drivers.map(d => d.team))].sort();
 const constructorIdByTeam = Object.fromEntries(drivers.map(d => [d.team, d.constructorId]));
-const jolpico_DRIVER_ID_ALIASES = {
+const jolpica_DRIVER_ID_ALIASES = {
   verstappen: "max_verstappen",
   lindblad: "arvid_lindblad",
   arvid_lindblad: "arvid_lindblad",
@@ -815,40 +815,40 @@ function findNextWeekend(fromIndex, predicate){
 
 
 /* =========================================================
-   Jolpico RESULTS IMPORT
+   Jolpica RESULTS IMPORT
    ========================================================= */
 
-function jolpicoRoundForWeekend(weekend) {
-  return weekend.jolpicoRound || weekend.round || weekend.id;
+function jolpicaRoundForWeekend(weekend) {
+  return weekend.jolpicaRound || weekend.round || weekend.id;
 }
 
-function jolpicoUrlForEvent(weekend, event) {
-  const round = jolpicoRoundForWeekend(weekend);
+function jolpicaUrlForEvent(weekend, event) {
+  const round = jolpicaRoundForWeekend(weekend);
   const endpoint = event.type === "SP" ? "sprint" : "results";
-  return `${jolpico_BASE}/${jolpico_SEASON}/${round}/${endpoint}.json`;
+  return `${jolpica_BASE}/${jolpica_SEASON}/${round}/${endpoint}.json`;
 }
 
-function localDriverIdFromjolpico(jolpicoDriverId) {
-  if (!jolpicoDriverId) return "";
-  const normalized = String(jolpicoDriverId).toLowerCase();
+function localDriverIdFromjolpica(jolpicaDriverId) {
+  if (!jolpicaDriverId) return "";
+  const normalized = String(jolpicaDriverId).toLowerCase();
   if (drivers.some(d => d.driverId === normalized)) return normalized;
-  return jolpico_DRIVER_ID_ALIASES[normalized] || "";
+  return jolpica_DRIVER_ID_ALIASES[normalized] || "";
 }
 
-function extractjolpicoClassifications(data, eventType) {
+function extractjolpicaClassifications(data, eventType) {
   const races = data?.MRData?.RaceTable?.Races || [];
   const race = races[0];
   if (!race) return [];
   return eventType === "SP" ? (race.SprintResults || []) : (race.Results || []);
 }
 
-async function fetchjolpicoResultsForEvent(weekend, event) {
-  const url = jolpicoUrlForEvent(weekend, event);
+async function fetchjolpicaResultsForEvent(weekend, event) {
+  const url = jolpicaUrlForEvent(weekend, event);
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`${event.label}: Jolpico returned ${res.status}`);
+  if (!res.ok) throw new Error(`${event.label}: Jolpica returned ${res.status}`);
 
   const data = await res.json();
-  const classifications = extractjolpicoClassifications(data, event.type);
+  const classifications = extractjolpicaClassifications(data, event.type);
   if (!classifications.length) throw new Error(`${event.label}: no ${event.type === "SP" ? "sprint" : "race"} results found`);
 
   if (!state.results[event.id]) state.results[event.id] = {};
@@ -856,11 +856,11 @@ async function fetchjolpicoResultsForEvent(weekend, event) {
   const imported = [];
   const unmatched = [];
   for (const row of classifications) {
-    const jolpicoDriverId = row?.Driver?.driverId || "";
-    const localDriverId = localDriverIdFromjolpico(jolpicoDriverId);
+    const jolpicaDriverId = row?.Driver?.driverId || "";
+    const localDriverId = localDriverIdFromjolpica(jolpicaDriverId);
     const place = Number(row.positionOrder || row.position || 0);
     if (!localDriverId || !place) {
-      unmatched.push(jolpicoDriverId || "unknown");
+      unmatched.push(jolpicaDriverId || "unknown");
       continue;
     }
     state.results[event.id][localDriverId] = place;
@@ -870,15 +870,15 @@ async function fetchjolpicoResultsForEvent(weekend, event) {
   return { eventId: event.id, label: event.label, imported, unmatched, url };
 }
 
-async function fetchjolpicoResultsForSelectedWeekend() {
+async function fetchjolpicaResultsForSelectedWeekend() {
   const weekend = weekends.find(w => w.id === state.ui.selectedWeekendId) || weekends[0];
-  setSaveStatus("Fetching Jolpico…");
+  setSaveStatus("Fetching jolpica…");
 
   const summaries = [];
   const errors = [];
   for (const event of weekend.events) {
     try {
-      summaries.push(await fetchjolpicoResultsForEvent(weekend, event));
+      summaries.push(await fetchjolpicaResultsForEvent(weekend, event));
     } catch (err) {
       errors.push(err.message || String(err));
     }
@@ -890,22 +890,22 @@ async function fetchjolpicoResultsForSelectedWeekend() {
   const importedCount = summaries.reduce((sum, item) => sum + item.imported.length, 0);
   const unmatched = summaries.flatMap(item => item.unmatched);
   const lines = [];
-  if (importedCount) lines.push(`Imported ${importedCount} result entries from Jolpico.`);
-  if (unmatched.length) lines.push(`Unmatched Jolpico driver IDs: ${[...new Set(unmatched)].join(", ")}`);
+  if (importedCount) lines.push(`Imported ${importedCount} result entries from Jolpica.`);
+  if (unmatched.length) lines.push(`Unmatched Jolpica driver IDs: ${[...new Set(unmatched)].join(", ")}`);
   if (errors.length) lines.push(`Skipped: ${errors.join(" | ")}`);
-  if (!lines.length) lines.push("No Jolpico results were imported.");
+  if (!lines.length) lines.push("No Jolpica results were imported.");
   alert(lines.join("\n"));
 }
 
-async function fetchjolpicoResultsForAllWeekends() {
-  setSaveStatus("Fetching Jolpico…");
+async function fetchjolpicaResultsForAllWeekends() {
+  setSaveStatus("Fetching Jolpica…");
   const summaries = [];
   const errors = [];
 
   for (const weekend of weekends) {
     for (const event of weekend.events) {
       try {
-        summaries.push(await fetchjolpicoResultsForEvent(weekend, event));
+        summaries.push(await fetchjolpicaResultsForEvent(weekend, event));
       } catch (err) {
         errors.push(err.message || String(err));
       }
@@ -917,9 +917,9 @@ async function fetchjolpicoResultsForAllWeekends() {
 
   const importedCount = summaries.reduce((sum, item) => sum + item.imported.length, 0);
   const unmatched = summaries.flatMap(item => item.unmatched);
-  const lines = [`Imported ${importedCount} result entries from Jolpico.`];
-  if (unmatched.length) lines.push(`Unmatched Jolpico driver IDs: ${[...new Set(unmatched)].join(", ")}`);
-  if (errors.length) lines.push(`Skipped ${errors.length} event(s) with no available Jolpico data yet.`);
+  const lines = [`Imported ${importedCount} result entries from Jolpica.`];
+  if (unmatched.length) lines.push(`Unmatched Jolpica driver IDs: ${[...new Set(unmatched)].join(", ")}`);
+  if (errors.length) lines.push(`Skipped ${errors.length} event(s) with no available Jolpica data yet.`);
   alert(lines.join("\n"));
 }
 
@@ -1360,7 +1360,7 @@ function viewResults() {
           <div class="grow">
             <strong>${e.type} — ${e.label}</strong>
             ${when}
-            <div class="small muted">Jolpico fills finishing places automatically. You can still edit any result manually.</div>
+            <div class="small muted">Jolpica fills finishing places automatically. You can still edit any result manually.</div>
           </div>
           <span class="pill">${e.type === "SP" ? "Sprint points (Top 8)" : "GP points (Top 10)"}</span>
         </div>
@@ -1389,11 +1389,11 @@ function viewResults() {
         <div class="row">
           <div class="grow">
             <strong>Commissioner Results</strong>
-            <div class="small">Fetch race and sprint classifications from Jolpico, then edit manually if needed.</div>
+            <div class="small">Fetch race and sprint classifications from Jolpica, then edit manually if needed.</div>
           </div>
           <span class="pill warn">Commissioner-only</span>
-          <button class="btn primary" id="resultsFetchjolpico">Fetch Weekend from Jolpico</button>
-          <button class="btn" id="resultsFetchAlljolpico">Fetch All Available</button>
+          <button class="btn primary" id="resultsFetchjolpica">Fetch Weekend from Jolpica</button>
+          <button class="btn" id="resultsFetchAlljolpica">Fetch All Available</button>
         </div>
 
         <div class="divider"></div>
@@ -1404,7 +1404,7 @@ function viewResults() {
             <select id="resultsWeekendSelect">
               ${weekends.map(w => `<option value="${w.id}" ${w.id===weekend.id?"selected":""}>${w.label}</option>`).join("")}
             </select>
-            <div class="small muted" style="margin-top:6px;">Jolpico lookup uses season <span class="mono">${jolpico_SEASON}</span> and round <span class="mono">${jolpicoRoundForWeekend(weekend)}</span>. You only need to edit event names if the round numbers stop matching.</div>
+            <div class="small muted" style="margin-top:6px;">Jolpica lookup uses season <span class="mono">${jolpica_SEASON}</span> and round <span class="mono">${jolpicaRoundForWeekend(weekend)}</span>. You only need to edit event names if the round numbers stop matching.</div>
           </div>
 
           <div class="row" style="justify-content:flex-end;">
@@ -1519,22 +1519,22 @@ function wireViewHandlers() {
     });
   }
 
-  // Jolpico results import
-  const resultsFetchjolpico = document.getElementById("resultsFetchjolpico");
-  if (resultsFetchjolpico) {
-    resultsFetchjolpico.addEventListener("click", async () => {
-      resultsFetchjolpico.disabled = true;
-      try { await fetchjolpicoResultsForSelectedWeekend(); }
-      finally { resultsFetchjolpico.disabled = false; }
+  // Jolpica results import
+  const resultsFetchjolpica = document.getElementById("resultsFetchjolpica");
+  if (resultsFetchjolpica) {
+    resultsFetchjolpica.addEventListener("click", async () => {
+      resultsFetchjolpica.disabled = true;
+      try { await fetchjolpicaResultsForSelectedWeekend(); }
+      finally { resultsFetchjolpica.disabled = false; }
     });
   }
 
-  const resultsFetchAlljolpico = document.getElementById("resultsFetchAlljolpico");
-  if (resultsFetchAlljolpico) {
-    resultsFetchAlljolpico.addEventListener("click", async () => {
-      resultsFetchAlljolpico.disabled = true;
-      try { await fetchjolpicoResultsForAllWeekends(); }
-      finally { resultsFetchAlljolpico.disabled = false; }
+  const resultsFetchAlljolpica = document.getElementById("resultsFetchAlljolpica");
+  if (resultsFetchAlljolpica) {
+    resultsFetchAlljolpica.addEventListener("click", async () => {
+      resultsFetchAlljolpica.disabled = true;
+      try { await fetchjolpicaResultsForAllWeekends(); }
+      finally { resultsFetchAlljolpica.disabled = false; }
     });
   }
 
